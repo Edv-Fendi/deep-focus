@@ -1,4 +1,4 @@
-import { PlayCircleIcon } from 'lucide-react';
+import { PlayCircleIcon, StopCircleIcon } from 'lucide-react';
 import { Button } from '../Button';
 import { Cycles } from '../Cycles';
 import { Input } from '../Input';
@@ -55,6 +55,26 @@ export function MainForm() {
     });
   }
 
+  function handleInterrupt() {
+    setState(prevState => {
+      return {
+        ...prevState,
+        activeTask: null,
+        secondsRemaining: 0,
+        formattedSecondsRemaining: '00:00',
+        tasks: prevState.tasks.map(task => {
+          if (task.id === prevState.activeTask?.id) {
+            return {
+              ...task,
+              interruptedDate: Date.now(),
+            };
+          }
+          return task;
+        }),
+      };
+    });
+  }
+
   return (
     <form onSubmit={handleSubmit} className='form' action=''>
       <div className='formRow'>
@@ -64,6 +84,7 @@ export function MainForm() {
           id='input'
           placeholder='Digite uma tarefa'
           ref={taskNameInput}
+          disabled={!!state.activeTask}
         />
       </div>
 
@@ -71,12 +92,33 @@ export function MainForm() {
         <p>O próximo ciclo é: 25min</p>
       </div>
 
-      <div className='formRow'>
-        <Cycles />
-      </div>
+      {state.currentCycle !== 0 && (
+        <div className='formRow'>
+          <Cycles />
+        </div>
+      )}
 
       <div className='formRow'>
-        <Button icon={<PlayCircleIcon />} color='green' />
+        {!state.activeTask && (
+          <Button
+            aria-label='Iniciar Tarefa'
+            title='Iniciar Tarefa'
+            type='submit'
+            icon={<PlayCircleIcon />}
+            color='green'
+          />
+        )}
+
+        {state.activeTask && (
+          <Button
+            aria-label='Interromper Tarefa'
+            title='Interromper Tarefa'
+            color='red'
+            type='button'
+            icon={<StopCircleIcon />}
+            onClick={handleInterrupt}
+          />
+        )}
       </div>
     </form>
   );
