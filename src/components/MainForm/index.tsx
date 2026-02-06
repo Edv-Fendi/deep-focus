@@ -7,10 +7,11 @@ import type { TaskModel } from '../../models/TaskModel';
 import { useTaskContext } from '../../contexts/TaskContext/useTaskContext';
 import { getNextCycle } from '../../utils/getNextCycle';
 import { getNextCycleType } from '../../utils/getNextCycleType';
-import { formatSecondsToMinutes } from '../../utils/formatSecondsToMinutes';
+import { ETaskActionsTypes } from '../../contexts/TaskContext/taskActions';
+import { Tips } from '../Tips';
 
 export function MainForm() {
-  const { state, setState } = useTaskContext();
+  const { state, dispatch } = useTaskContext();
   const taskNameInput = useRef<HTMLInputElement>(null);
 
   const nextCycle = getNextCycle(state.currentCycle);
@@ -41,37 +42,12 @@ export function MainForm() {
       type: nextCycleType,
     };
 
-    const secondsRemaining = newTask.duration * 60;
-
-    setState(prevState => {
-      return {
-        ...prevState,
-        activeTask: newTask,
-        currentCycle: nextCycle,
-        secondsRemaining: secondsRemaining,
-        formattedSecondsRemaining: formatSecondsToMinutes(secondsRemaining),
-        tasks: [...prevState.tasks, newTask],
-      };
-    });
+    dispatch({ type: ETaskActionsTypes.START_TASK, payload: newTask });
   }
 
   function handleInterrupt() {
-    setState(prevState => {
-      return {
-        ...prevState,
-        activeTask: null,
-        secondsRemaining: 0,
-        formattedSecondsRemaining: '00:00',
-        tasks: prevState.tasks.map(task => {
-          if (task.id === prevState.activeTask?.id) {
-            return {
-              ...task,
-              interruptedDate: Date.now(),
-            };
-          }
-          return task;
-        }),
-      };
+    dispatch({
+      type: ETaskActionsTypes.INTERRUPT_TASK,
     });
   }
 
@@ -89,7 +65,9 @@ export function MainForm() {
       </div>
 
       <div className='formRow'>
-        <p>O próximo ciclo é: 25min</p>
+        <p>
+          <Tips />
+        </p>
       </div>
 
       {state.currentCycle !== 0 && (
