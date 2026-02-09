@@ -1,5 +1,5 @@
-import { Suspense, lazy } from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router';
+import { Suspense, lazy, useEffect } from 'react';
+import { BrowserRouter, Route, Routes, useLocation } from 'react-router';
 import { Loading } from '../components/Loading';
 
 const Home = lazy(() =>
@@ -12,6 +12,16 @@ const NotFound = lazy(() =>
   import('../pages/NotFound').then(module => ({ default: module.NotFound })),
 );
 
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [pathname]);
+
+  return null;
+}
+
 export function Router() {
   return (
     <BrowserRouter>
@@ -22,6 +32,7 @@ export function Router() {
           <Route path='*' element={<NotFound />} />
         </Routes>
       </Suspense>
+      <ScrollToTop />
     </BrowserRouter>
   );
 }
