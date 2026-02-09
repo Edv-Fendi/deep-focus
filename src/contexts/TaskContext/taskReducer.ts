@@ -8,7 +8,6 @@ export function taskReducer(
   action: TaskActionModel,
 ): TaskStateModel {
   switch (action.type) {
-    
     case ETaskActionsTypes.START_TASK: {
       const newTask = action.payload;
       const nextCycle = getNextCycle(state.currentCycle);
@@ -41,10 +40,34 @@ export function taskReducer(
       };
     }
 
-    case ETaskActionsTypes.RESET_STATE:
-      {
-        return state;
-      }
+    case ETaskActionsTypes.RESET_STATE: {
       return state;
+    }
+    case ETaskActionsTypes.COUNT_DOWN: {
+      return {
+        ...state,
+        secondsRemaining: action.payload.secondsRemaining,
+        formattedSecondsRemaining: formatSecondsToMinutes(
+          action.payload.secondsRemaining,
+        ),
+      };
+    }
+    case ETaskActionsTypes.COMPLETE_TASK: {
+      return {
+        ...state,
+        activeTask: null,
+        secondsRemaining: 0,
+        formattedSecondsRemaining: '00:00',
+        tasks: state.tasks.map(task => {
+          if (task.id === state.activeTask?.id) {
+            return {
+              ...task,
+              completedDate: Date.now(),
+            };
+          }
+          return task;
+        }),
+      };
+    }
   }
 }
