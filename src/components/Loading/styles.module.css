@@ -1,0 +1,26 @@
+.loading {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: var(--text-default);
+}
+
+.icon {
+  width: 32px;
+  height: 32px;
+  color: var(--primary);
+  animation: loading-spin 0.9s linear infinite;
+}
+
+.text {
+  color: var(--text-muted);
+}
+
+@keyframes loading-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
