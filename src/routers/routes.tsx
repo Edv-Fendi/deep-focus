@@ -1,6 +1,7 @@
 import { Suspense, lazy, useEffect } from 'react';
 import { BrowserRouter, Route, Routes, useLocation } from 'react-router';
 import { Loading } from '../components/Loading';
+import { History } from '../pages/History';
 
 const Home = lazy(() =>
   import('../pages/Home').then(module => ({ default: module.Home })),
@@ -29,6 +30,7 @@ export function Router() {
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/about-pomodoro/' element={<AboutPomodoro />} />
+          <Route path='/history' element={<History />} />
           <Route path='*' element={<NotFound />} />
         </Routes>
       </Suspense>
