@@ -7,12 +7,17 @@ export enum ETaskActionsTypes {
   RESET_STATE = 'RESET_STATE',
   COMPLETE_TASK = 'COMPLETE_TASK',
   COUNT_DOWN = 'COUNT_DOWN',
+  CHANGE_SETTINGS = 'CHANGE_SETTINGS',
 }
 
 export type TaskActionWithPayload =
   | {
       type: ETaskActionsTypes.START_TASK;
       payload: TaskModel;
+    }
+  | {
+      type: ETaskActionsTypes.CHANGE_SETTINGS;
+      payload: TaskStateModel['config'];
     }
   | {
       type: ETaskActionsTypes.COUNT_DOWN;

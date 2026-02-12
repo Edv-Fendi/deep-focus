@@ -43,7 +43,7 @@ export function taskReducer(
 
     case ETaskActionsTypes.RESET_STATE: {
       return {
-        ...initialTaskState
+        ...initialTaskState,
       };
     }
     case ETaskActionsTypes.COUNT_DOWN: {
@@ -70,6 +70,16 @@ export function taskReducer(
           }
           return task;
         }),
+      };
+    }
+
+    case ETaskActionsTypes.CHANGE_SETTINGS: {
+      return {
+        ...state,
+        config: {
+          ...state.config,
+          ...action.payload,
+        },
       };
     }
   }

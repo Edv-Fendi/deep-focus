@@ -12,6 +12,9 @@ const AboutPomodoro = lazy(() =>
 const NotFound = lazy(() =>
   import('../pages/NotFound').then(module => ({ default: module.NotFound })),
 );
+const Settings = lazy(() =>
+  import('../pages/Settings').then(module => ({ default: module.Settings })),
+);
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -31,6 +34,8 @@ export function Router() {
           <Route path='/' element={<Home />} />
           <Route path='/about-pomodoro/' element={<AboutPomodoro />} />
           <Route path='/history' element={<History />} />
+          <Route path='/settings' element={<Settings />} />
+
           <Route path='*' element={<NotFound />} />
         </Routes>
       </Suspense>
